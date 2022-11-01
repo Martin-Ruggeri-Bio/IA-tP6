@@ -1,5 +1,5 @@
 from convertidor_images_array import convertidor_imagenes_a_lista_de_array
-from neurona_oculta_2 import Neurona
+from neurona_oculta import Neurona
 import matplotlib.pyplot as plt
 
 def productor_de_neuronas_ocultas(cant_neuronas_capa_oculta):
@@ -11,7 +11,7 @@ def productor_de_neuronas_ocultas(cant_neuronas_capa_oculta):
 
 if __name__ == '__main__':
     salida_capa_oculta = []
-    url_imagenes_para_aprender = '/home/martin/Facultad/IA/redNeuronal/red_neuronal_imagenes/images_para_aprender'
+    url_imagenes_para_aprender = '/home/martin/Facultad/IA/redNeuronal/red_neuronal_imagenes/IA-tP6/images_para_aprender'
     entradas = convertidor_imagenes_a_lista_de_array(url_imagenes_para_aprender)
     salidas_esperadas = [1,0,1,0,1,0,1,0,1,0]
     cant_neuronas_capa_oculta = 100
@@ -61,3 +61,22 @@ if __name__ == '__main__':
     ax2.set_ylabel('Error')
     fig.savefig("Variaciones por Iteraciones.png")
 
+    url_imagenes_para_predecir = '/home/martin/Facultad/IA/redNeuronal/red_neuronal_imagenes/IA-tP6/imagenes_para_predecir'
+    entradas2 = convertidor_imagenes_a_lista_de_array(url_imagenes_para_predecir)
+    predicciones = {}
+    for key in entradas2:
+        for i in range(cant_neuronas_capa_oculta):
+            neurona_capa_oculta[i].asignar_entrada(entradas2[key].copy())
+            salida_capa_oculta[i] = neurona_capa_oculta[i].entrenamiento()
+        print(salida_capa_oculta)
+        neurona_final.asignar_entrada(salida_capa_oculta.copy())
+        salida_real = neurona_final.entrenamiento()
+        print(salida_real)
+        if abs(1-salida_real) < 0.1 :
+            predicciones[key] = 'Persona A'
+        else:
+            predicciones[key] = 'Persona B'
+    
+    print("El resultado de las predicciones es:")
+    for key in predicciones:
+        print(f"Para la imagen: {key}.png la prediccion indica que es la {predicciones[key]}")
